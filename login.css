@@ -1,0 +1,15 @@
+
+input{
+			border:1px solid black;
+		}
+
+input:focus{
+			background-color:#E6E6E6;;
+
+		}
+form{
+  width:30%;
+  padding-left:35%;
+  padding-top:150px;
+  font-size:xx-large;
+}
