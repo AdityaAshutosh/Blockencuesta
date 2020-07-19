@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>About Us</title>
+  <link rel="stylesheet" href="">
+
+  <style>
+    #heading{
+      width: 300px;
+      height: 100px;
+      background-color: red;
+      border-radius:25px;
+      padding-top:1px;
+      text-align:center;
+      font-size:25px;
+      position: relative;
+      animation-name:yo;
+      animation-direction:ease-in-out;
+      animation-duration:12s;
+      animation-iteration-count:infinite;
+    }
+    body{
+      background: url('images/bg.jpg') no-repeat center center fixed;
+     -webkit-background-size: cover;
+     -moz-background-size: cover;
+     -o-background-size: cover;
+     background-size: cover;
+     width: 100%;
+    }
+    @keyframes yo {
+  0%   {background-color:red; left:0px; top:0px;}
+  50%  {background-color:yellow; left:76%; top:0%;}
+  100% { background-color:green; left:0%; top:76%;}
+}
+
+    #pic{
+       display:inline-block;
+      padding-top:100px;
+      width:15%;
+      padding-left:105px;
+     }
+
+     h3{
+      /* padding:1px;*/
+       font-size:20px;
+       font-family:verdana;
+     }
+    p{
+      padding-top:50px;
+      text-align:center;
+      font-size:25px;
+    }
+  </style>
+</head>
+<body>
+  <div id="heading">
+    <h2 style="color:black">ABOUT US</h2>
+  </div>
+
+
+    <div id="pic">
+    <img src="images/member.jpg" alt="Trulli" width="150px" height="150px">
+    <h3 style="color:#03fcf0">Aditya Ashutosh</h3>
+    </div>
+
+    <div id="pic">
+    <img src="images/member.jpg" alt="Trulli" width="150px" heigth="150px">
+      <h3 style="color:#03fcf0">Ajinkya  Tat</h3>
+    </div>
+
+    <div id="pic">
+    <img src="images/member.jpg" alt="Trulli" width="150px" height="150px">
+      <h3 style="color:#03fcf0">Sanket Kolte</h3>
+    </div>
+
+    <div id="pic">
+    <img src="images/member.jpg" alt="Trulli" width="150px" heigth="150px">
+      <h3 style="color:#03fcf0">Geervani Reddy</h3>
+    </div>
+
+    <div id="details">
+      <p style="color:white">Aditya Ashutosh is the team leader.
+        Aditya And Ajinkya have worked on the back-end whereas Geervani and Sanket on the front-end.
+        Special thanks to our mentor Ankit Gupta ,peer-mentors Anish Kulkarni and Zahid Hussain and Mrs Rohini Bhalerao.</p>
+     </div>
+
+
+</body>
+</html>
