@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="app.js"></script>
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial;
+  font-size: 17px;
+}
+
+#myVideo {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  min-width: 100%;
+  min-height: 100%;
+}
+.topic{
+  position:relative;
+  font-size:40px;
+  text-align:center;
+  color: #fff;
+  -webkit-animation: glow 1s ease-in-out infinite alternate;
+  -moz-animation: glow 1s ease-in-out infinite alternate;
+  animation: glow 1s ease-in-out infinite alternate;
+  opacity:0.8;
+}
+@-webkit-keyframes glow {
+  from {
+    text-shadow:0 0 10px orange, 0 0 20px #fff, 0 0 30px #e60073, 0 0 40px #e60073, 0 0 50px #e60073;
+  }
+
+  to {
+    text-shadow:  0 0 20px orange, 0 0 30px #ff4da6, 0 0 40px #ff4da6, 0 0 50px #ff4da6;
+  }
+}
+
+.content {
+  position: relative;
+  bottom: 0;
+
+  color: #f1f1f1;
+  width: 100%;
+  padding: 20px;
+  text-align:center;
+  font-size:25px;
+
+}
+
+#myBtn {
+  width: 200px;
+  font-size: 18px;
+  padding: 10px;
+  border: none;
+  background-color:black;
+  color: #fff;
+  cursor: pointer;
+  margin:
+}
+
+#myBtn:hover {
+  background: #ddd;
+  color: black;
+}
+h1{
+ text-align:center;
+}
+a{
+  text-align:center;
+  font-size:30px;
+  font-weight:bold;
+}
+.proceed{
+  font-size: 24px;
+  position:relative;
+  width: 350px;
+  height: 100px;
+  border-radius:30px;
+  text-align:center;
+  padding-top:15px;
+  opacity:0.5;
+  margin-left:34%;
+  margin-bottom:10px;
+}
+.button-group{
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+
+}
+.btn, button, input[type="submit"], input[type="button"] {
+  display: inline-block;
+  line-height: 1.625;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  font-size: 2rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1.75px;
+  padding: 1rem 3.125rem;
+  margin-bottom:10px;
+  border: 1px solid transparent;
+  border-radius: 50px;
+  outline: none !important;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  background-color:black;
+}
+.btn-success {
+  color: #fff;
+  background-color: #rgb(25,25,25);
+  border-color: white;
+}
+.btn-success:hover {
+  color: #fff;
+  background-color:#c95908;
+  border-color: #2b711b;
+}
+.button-sm{
+  padding: 10px 15px;
+  font-size: 12px;
+  text-decoration: none;
+}
+</style>
+</head>
+<body>
+
+<video autoplay muted loop id="myVideo">
+  <source src="videoplayback.mp4" type="video/mp4">
+  Your browser does not support HTML5 video.
+</video>
+
+<header class="topic">
+  <h2>BLOCKENCUESTA</h2>
+</header>
+  <div class="proceed"><a href="vote.html"class="btn btn-success">Proceed to VOTE</a></div>
+
+<div class="content">
+  <a href="" style="color:rgba(15,220,230,0.75)" class="typewrite" data-period="2000" data-type='[ "Transparent", "Secured", "Decentralized", "Reliable","Tamperproof" ]'>
+    <span class="wrap"></span>
+  </a>
+  <p>Blockencuesta is a much needed digital solution to the current hectic election system. The features which make it sensational and disruptive are powered by the underlying technology behind the system, which is Blockchain. Blockchain is a glorified database- cum - network model which is already overhyped and in its overwhelming phase of innovation. The Blockchain initiative ensures a system in which tampering is next to impossible, is decentralized, trustless and reliable as never before. This in turn makes the system independent and completely verifiable. So, are you ready to dive in and experience a completely new and technically sound DEMOCRATIC experience?</p>
+</div>
+
+<div class="button-group">
+       <a href="work.html"class="btn btn-success button-sm" target="_blank">How It Works</a>
+          <a href="about.html" class="btn btn-success button-sm" target="_blank">About</a>
+          <a href="paper.pdf" class="btn btn-success button-sm"target="_blank">White Paper</a>
+</div>
+</body>
+</html>
