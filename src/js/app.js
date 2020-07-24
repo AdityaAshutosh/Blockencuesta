@@ -2,12 +2,12 @@ App = {
   web3Provider: null,
   contracts: {},
   account: '0x0',
-//initialize our app
+  hasVoted: false,
+
   init: function() {
     return App.initWeb3();
   },
-//initialize web3
-//it connects the client side application to local blockchain
+
   initWeb3: function() {
     // TODO: refactor conditional
     if (typeof web3 !== 'undefined') {
@@ -21,9 +21,7 @@ App = {
     }
     return App.initContract();
   },
-//initialize contract
-//this function loads our contract into the front-end application
-//we use JSON to generate a truffle contract to interact with the app
+
   initContract: function() {
     $.getJSON("Election.json", function(election) {
       // Instantiate a new truffle contract from the artifact
@@ -31,12 +29,29 @@ App = {
       // Connect provider to interact with contract
       App.contracts.Election.setProvider(App.web3Provider);
 
+      App.listenForEvents();
+
       return App.render();
     });
   },
-//provide the content of our application on the page
-//this function will display the account that we are connected to the blockchain.
-//it is also going to list all the candidates in the election
+
+  // Listen for events emitted from the contract
+  listenForEvents: function() {
+    App.contracts.Election.deployed().then(function(instance) {
+      // Restart Chrome if you are unable to receive this event
+      // This is a known issue with Metamask
+      // https://github.com/MetaMask/metamask-extension/issues/2393
+      instance.votedEvent({}, {
+        fromBlock: 0,
+        toBlock: 'latest'
+      }).watch(function(error, event) {
+        console.log("event triggered", event)
+        // Reload when a new vote is recorded
+        App.render();
+      });
+    });
+  },
+
   render: function() {
     var electionInstance;
     var loader = $("#loader");
@@ -60,7 +75,10 @@ App = {
     }).then(function(candidatesCount) {
       var candidatesResults = $("#candidatesResults");
       candidatesResults.empty();
-//to list each candidate
+
+      var candidatesSelect = $('#candidatesSelect');
+      candidatesSelect.empty();
+
       for (var i = 1; i <= candidatesCount; i++) {
         electionInstance.candidates(i).then(function(candidate) {
           var id = candidate[0];
@@ -70,13 +88,35 @@ App = {
           // Render candidate Result
           var candidateTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>" + voteCount + "</td></tr>"
           candidatesResults.append(candidateTemplate);
+
+          // Render candidate ballot option
+          var candidateOption = "<option value='" + id + "' >" + name + "</ option>"
+          candidatesSelect.append(candidateOption);
         });
       }
-
+      return electionInstance.voters(App.account);
+    }).then(function(hasVoted) {
+      // Do not allow a user to vote
+      if(hasVoted) {
+        $('form').hide();
+      }
       loader.hide();
       content.show();
     }).catch(function(error) {
       console.warn(error);
+    });
+  },
+
+  castVote: function() {
+    var candidateId = $('#candidatesSelect').val();
+    App.contracts.Election.deployed().then(function(instance) {
+      return instance.vote(candidateId, { from: App.account });
+    }).then(function(result) {
+      // Wait for votes to update
+      $("#content").hide();
+      $("#loader").show();
+    }).catch(function(err) {
+      console.error(err);
     });
   }
 };

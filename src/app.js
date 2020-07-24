@@ -1,60 +1,89 @@
-var TxtType = function(el, toRotate, period) {
-        this.toRotate = toRotate;
-        this.el = el;
-        this.loopNum = 0;
-        this.period = parseInt(period, 10) || 2000;
-        this.txt = '';
-        this.tick();
-        this.isDeleting = false;
-    };
-
-    TxtType.prototype.tick = function() {
-        var i = this.loopNum % this.toRotate.length;
-        var fullTxt = this.toRotate[i];
-
-        if (this.isDeleting) {
-        this.txt = fullTxt.substring(0, this.txt.length - 1);
-        } else {
-        this.txt = fullTxt.substring(0, this.txt.length + 1);
+App = {
+    web3Provider: null,
+    contracts: {},
+    account: '0x0',
+  //initialize our app
+    init: function() {
+      return App.initWeb3();
+    },
+  //initialize web3
+  //it connects the client side application to local blockchain
+    initWeb3: function() {
+      // TODO: refactor conditional
+      if (typeof web3 !== 'undefined') {
+        // If a web3 instance is already provided by Meta Mask.
+        App.web3Provider = web3.currentProvider;
+        web3 = new Web3(web3.currentProvider);
+      } else {
+        // Specify default instance if no web3 instance provided
+        App.web3Provider = new Web3.providers.HttpProvider('http://localhost:7545');
+        web3 = new Web3(App.web3Provider);
+      }
+      return App.initContract();
+    },
+  //initialize contract
+  //this function loads our contract into the front-end application
+  //we use JSON to generate a truffle contract to interact with the app
+    initContract: function() {
+      $.getJSON("Election.json", function(election) {
+        // Instantiate a new truffle contract from the artifact
+        App.contracts.Election = TruffleContract(election);
+        // Connect provider to interact with contract
+        App.contracts.Election.setProvider(App.web3Provider);
+  
+        return App.render();
+      });
+    },
+  //provide the content of our application on the page
+  //this function will display the account that we are connected to the blockchain.
+  //it is also going to list all the candidates in the election
+    render: function() {
+      var electionInstance;
+      var loader = $("#loader");
+      var content = $("#content");
+  
+      loader.show();
+      content.hide();
+  
+      // Load account data
+      web3.eth.getCoinbase(function(err, account) {
+        if (err === null) {
+          App.account = account;
+          $("#accountAddress").html("Your Account: " + account);
         }
-
-        this.el.innerHTML = '<span class="wrap">'+this.txt+'</span>';
-
-        var that = this;
-        var delta = 200 - Math.random() * 100;
-
-        if (this.isDeleting) { delta /= 2; }
-
-        if (!this.isDeleting && this.txt === fullTxt) {
-        delta = this.period;
-        this.isDeleting = true;
-        } else if (this.isDeleting && this.txt === '') {
-        this.isDeleting = false;
-        this.loopNum++;
-        delta = 500;
+      });
+  
+      // Load contract data
+      App.contracts.Election.deployed().then(function(instance) {
+        electionInstance = instance;
+        return electionInstance.candidatesCount();
+      }).then(function(candidatesCount) {
+        var candidatesResults = $("#candidatesResults");
+        candidatesResults.empty();
+  //to list each candidate
+        for (var i = 1; i <= candidatesCount; i++) {
+          electionInstance.candidates(i).then(function(candidate) {
+            var id = candidate[0];
+            var name = candidate[1];
+            var voteCount = candidate[2];
+  
+            // Render candidate Result
+            var candidateTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>" + voteCount + "</td></tr>"
+            candidatesResults.append(candidateTemplate);
+          });
         }
-
-        setTimeout(function() {
-        that.tick();
-        }, delta);
-    };
-	
-
-    window.onload = function() {
-        var elements = document.getElementsByClassName('typewrite');
-        for (var i=0; i<elements.length; i++) {
-            var toRotate = elements[i].getAttribute('data-type');
-            var period = elements[i].getAttribute('data-period');
-            if (toRotate) {
-              new TxtType(elements[i], JSON.parse(toRotate), period);
-            }
-        }
-        // INJECT CSS
-        var css = document.createElement("style");
-        css.type = "text/css";
-        css.innerHTML = ".typewrite > .wrap { border-right: 0.08em solid #fff}";
-        document.body.appendChild(css);
-		
-		var vid = document.getElementById("myVideo");
-		vid.playbackRate = 0.45;
-    };
+  
+        loader.hide();
+        content.show();
+      }).catch(function(error) {
+        console.warn(error);
+      });
+    }
+  };
+  
+  $(function() {
+    $(window).load(function() {
+      App.init();
+    });
+  });
+  
